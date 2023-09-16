@@ -1,0 +1,12 @@
+node_modules/
+npm-debug.log
+dist
+*.vsix
+out/
+*.map
+*.tsbuildinfo
+.vscode/
+.vscode-test/
+*.code-workspace
+.DS_Store
+Thumbs.db
