@@ -9,11 +9,11 @@ Easily select the content you just pasted into VSCode with the **Auto Select Pas
 
 ## Installation
 
-1. Download the `.vsix` file from the repository or release section.
-2. Open VSCode.
-3. Go to the Extensions view (Ctrl + Shift + X).
-4. Click on the `...` (More Actions) button in the top-right corner.
-5. Choose `Install from VSIX...` and select the downloaded `.vsix` file.
+1. Open VSCode.
+2. Go to the Extensions view (Ctrl + Shift + X).
+3. Search for Auto Select Pasted Text
+4. Install
+5. Profit
 
 ## Usage
 
@@ -25,8 +25,8 @@ Once the extension is installed, any text you paste will automatically be select
 
 ## Development
 
-The source code for the extension can be found on [GitHub](#). (Replace `#` with your repository link)
+The source code for the extension can be found on [GitHub]([#](https://github.com/TagWolf/auto-select-pasted-text.git)). (Replace `#` with your repository link)
 
 ## Feedback and Contributions
 
-Feedback, bug reports, and pull requests are welcomed. Feel free to open an issue or submit a pull request on the [GitHub repository](#). (Again, replace `#` with your repository link)
+Feedback, bug reports, and pull requests are welcomed. Feel free to open an issue or submit a pull request on the [GitHub repository]([#](https://github.com/TagWolf/auto-select-pasted-text.git)https://github.com/TagWolf/auto-select-pasted-text.git).
