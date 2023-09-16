@@ -3,7 +3,12 @@
   "displayName": "Auto Select Pasted Text",
   "description": "Automatically selects text after it's pasted",
   "version": "0.0.1",
-  "publisher": "Furbidden Studios",
+  "publisher": "David Cahill",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TagWolf/auto-select-pasted-text.git"
+  },
   "engines": {
     "vscode": "^1.52.0"
   },
