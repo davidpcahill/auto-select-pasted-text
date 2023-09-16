@@ -2,8 +2,8 @@
   "name": "auto-select-pasted-text",
   "displayName": "Auto Select Pasted Text",
   "description": "Automatically selects text after it's pasted",
-  "version": "0.0.1",
-  "publisher": "David Cahill",
+  "version": "0.0.3",
+  "publisher": "davidcahill",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -16,7 +16,9 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:editor.action.clipboardPasteAction"
+    "onCommand:editor.action.clipboardPasteAction",
+    "onDidChangeActiveTextEditor",
+    "onDidChangeTextEditorSelection"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -24,6 +26,14 @@
       {
         "command": "editor.action.clipboardPasteAction",
         "title": "Paste and Select"
+      },
+      {
+        "command": "autoSelectPastedText.enable",
+        "title": "Enable Auto Select Pasted Text"
+      },
+      {
+        "command": "autoSelectPastedText.disable",
+        "title": "Disable Auto Select Pasted Text"
       }
     ],
     "configuration": {
