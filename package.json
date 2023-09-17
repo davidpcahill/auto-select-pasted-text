@@ -3,7 +3,7 @@
   "displayName": "Auto Select Pasted Text",
   "description": "Automatically selects text after it's pasted",
   "icon": "autoselectpastedtextlogo.png",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "publisher": "davidcahill",
   "license": "MIT",
   "repository": {
@@ -39,5 +39,20 @@
     "tslint": "^6.1.0",
     "@types/node": "^14.14.10",
     "@types/mocha": "^2.2.42"
-  }
+  },
+  "keywords": [
+    "paste",
+    "text",
+    "selection",
+    "indent",
+    "auto",
+    "highlight",
+    "clipboard",
+    "editing",
+    "automation",
+    "productivity",
+    "vscode-extension",
+    "code-editing",
+    "formatting"
+  ]
 }
