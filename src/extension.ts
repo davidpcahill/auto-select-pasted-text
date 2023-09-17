@@ -1,65 +1,68 @@
 import * as vscode from 'vscode';
 
+let lastPastedContent: string | null = null;
+
 export function activate(context: vscode.ExtensionContext) {
+    const outputChannel = vscode.window.createOutputChannel("AutoSelectPaste");
 
-	// A flag to determine if the last action by the user was a paste action.
-	let hasPastedRecently = false;
+    outputChannel.appendLine('Activating AutoSelectPaste extension...');
 
-	// Monitor changes in the text document (like pasting).
-	vscode.workspace.onDidChangeTextDocument(event => {
-		// Only proceed if a paste action was detected previously.
-		if (!hasPastedRecently) {
-			return;
-		}
+    let pasteCommandDisposable = vscode.commands.registerCommand('editor.action.clipboardPasteAction', async () => {
+        outputChannel.appendLine('Paste command executed.');
 
-		// Check if the auto-selection feature is enabled in settings.
-		let isEnabled = vscode.workspace.getConfiguration().get('autoSelectPastedText.enabled', true);
-		if (!isEnabled) {
-			return;
-		}
+        const clipboardContent = await vscode.env.clipboard.readText();
 
-		// Get the currently active editor.
-		let editor = vscode.window.activeTextEditor;
-		if (!editor) {
-			return;
-		}
+        if (clipboardContent) {
+            const editor = vscode.window.activeTextEditor;
+            if (editor) {
+                let targetSelection: vscode.Selection;
 
-		// Determine the range of the pasted content.
-		let contentChanges = event.contentChanges;
-		if (contentChanges && contentChanges.length > 0) {
-			let contentChange = contentChanges[contentChanges.length - 1];
-			let start = contentChange.range.start;
-			let end = new vscode.Position(start.line, start.character + contentChange.text.length);
+                // If the clipboard content matches the last pasted content, append after the current selection.
+                if (clipboardContent === lastPastedContent) {
+                    const currentPosition = editor.selection.end;
+                    targetSelection = new vscode.Selection(currentPosition, currentPosition);
+                } else {
+                    targetSelection = editor.selection;
+                    lastPastedContent = clipboardContent;  // Update the last pasted content
+                }
 
-			// Highlight (select) the pasted content.
-			editor.selection = new vscode.Selection(start, end);
-		}
+                const linesPasted = clipboardContent.split('\n');
+                const lastLineLength = linesPasted[linesPasted.length - 1].length;
 
-		// Reset for future paste actions.
-		hasPastedRecently = false;
-	});
+                editor.edit((editBuilder) => {
+                    editBuilder.replace(targetSelection, clipboardContent);
+                }).then((success) => {
+                    if (success) {
+                        outputChannel.appendLine("Content pasted successfully.");
 
-	// Override the default paste action to set our flag and then perform the normal paste.
-	vscode.commands.registerCommand('editor.action.clipboardPasteAction', async () => {
-		hasPastedRecently = true;
-		await vscode.commands.executeCommand('default:paste');
-	});
+                        // Calculate the end position for the selection after paste
+                        const endLine = targetSelection.start.line + linesPasted.length - 1;
+                        const endCharacter = (linesPasted.length === 1) ? (targetSelection.start.character + lastLineLength) : lastLineLength;
+                        const endPosition = new vscode.Position(endLine, endCharacter);
 
-	// Deselect text if the user changes the active editor or navigates to another file.
-	vscode.window.onDidChangeActiveTextEditor(editor => {
-		if (editor) {
-			const position = editor.selection.active;
-			editor.selection = new vscode.Selection(position, position);
-		}
-	});
+                        // Create a new selection that covers the pasted content
+                        editor.selection = new vscode.Selection(targetSelection.start, endPosition);
+                        editor.revealRange(new vscode.Range(targetSelection.start, endPosition), vscode.TextEditorRevealType.Default);
+                    } else {
+                        outputChannel.appendLine("Failed to paste content.");
+                    }
+                });
+            }
+        } else {
+            outputChannel.appendLine('Clipboard is empty.');
+        }
+    });
 
-	// Deselect text if all selected content is deleted.
-	vscode.window.onDidChangeTextEditorSelection(event => {
-		if (event.selections[0].isEmpty) {
-			const position = event.selections[0].active;
-			event.textEditor.selection = new vscode.Selection(position, position);
-		}
-	});
+    context.subscriptions.push(pasteCommandDisposable);
+
+    // Log changes to text editor selection for debugging purposes
+    vscode.window.onDidChangeTextEditorSelection((event) => {
+        if (event.textEditor.document.uri.scheme === 'file') {
+            const selections = event.selections;
+            if (selections && selections.length > 0) {
+                const selection = selections[0];
+                outputChannel.appendLine(`Selection changed: Start(${selection.start.line}, ${selection.start.character}), End(${selection.end.line}, ${selection.end.character})`);
+            }
+        }
+    });
 }
-
-export function deactivate() { }
