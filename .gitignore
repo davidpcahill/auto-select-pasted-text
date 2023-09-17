@@ -14,4 +14,5 @@ Thumbs.db
 .vscodeignore
 /src/test
 package-lock.json
-tsconfig.jsonvsc-extension-quickstart.md
+tsconfig.json
+vsc-extension-quickstart.md
