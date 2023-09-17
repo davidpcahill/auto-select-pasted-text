@@ -10,3 +10,8 @@ out/
 *.code-workspace
 .DS_Store
 Thumbs.db
+.eslintrc.json
+.vscodeignore
+/src/test
+package-lock.json
+tsconfig.jsonvsc-extension-quickstart.md
