@@ -2,7 +2,8 @@
   "name": "auto-select-pasted-text",
   "displayName": "Auto Select Pasted Text",
   "description": "Automatically selects text after it's pasted",
-  "version": "0.1.2",
+  "icon": "autoselectpastedtextlogo.png",
+  "version": "0.1.3",
   "publisher": "davidcahill",
   "license": "MIT",
   "repository": {
