@@ -2,6 +2,10 @@
 
 All notable changes to the "Auto Select Pasted Text" extension will be documented in this file.
 
+## [0.1.7] - 2023-09-18
+- Finalized testing for public release.
+- Updated README to better explain the utility and importance of the extension.
+
 ## [0.1.6] - 2023-09-18
 - Added relevant keywords for Marketplace.
 
