@@ -2,7 +2,10 @@
 
 All notable changes to the "Auto Select Pasted Text" extension will be documented in this file.
 
-## [0.1.8] - 2023-09-20
+## [0.1.9] - 2023-10-08
+- Updated changelog.
+
+## [0.1.8] - 2023-10-08
 
 ### Added
 - Implemented behavior to deselect text when alphanumeric, symbol, space, or enter keys are pressed while text is selected. This streamlines the editing experience, allowing users to continue typing seamlessly after pasting content.
