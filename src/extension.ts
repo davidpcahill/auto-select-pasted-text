@@ -10,6 +10,19 @@ export function activate(context: vscode.ExtensionContext) {
     // Indicate activation in the output channel
     outputChannel.appendLine('Activating AutoSelectPaste extension...');
 
+    // Register the type command to handle the deselection behavior
+    vscode.commands.registerCommand('type', (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            const currentSelection = editor.selection;
+            if (!currentSelection.isEmpty) {
+                const currentPosition = currentSelection.end;
+                editor.selection = new vscode.Selection(currentPosition, currentPosition);
+            }
+        }
+        vscode.commands.executeCommand('default:type', args);
+    });
+
     // Register the paste command
     let pasteCommandDisposable = vscode.commands.registerCommand('editor.action.clipboardPasteAction', async () => {
         outputChannel.appendLine('Paste command executed.');

@@ -3,7 +3,7 @@
   "displayName": "Auto Select Pasted Text",
   "description": "Automatically selects text after it's pasted",
   "icon": "autoselectpastedtextlogo.png",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "publisher": "davidcahill",
   "license": "MIT",
   "repository": {
@@ -17,7 +17,8 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:editor.action.clipboardPasteAction"
+    "onCommand:editor.action.clipboardPasteAction",
+    "onCommand:type"
   ],
   "main": "./out/extension.js",
   "contributes": {
