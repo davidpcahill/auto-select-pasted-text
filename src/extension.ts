@@ -3,6 +3,9 @@ import * as vscode from 'vscode';
 // Variable to store the last pasted content
 let lastPastedContent: string | null = null;
 
+// Flag to track if the selection was auto-selected after pasting
+let autoSelected: boolean = false;
+
 export function activate(context: vscode.ExtensionContext) {
     // Create an output channel for logging extension-related activities
     const outputChannel = vscode.window.createOutputChannel("AutoSelectPaste");
@@ -13,11 +16,12 @@ export function activate(context: vscode.ExtensionContext) {
     // Register the type command to handle the deselection behavior
     vscode.commands.registerCommand('type', (args) => {
         const editor = vscode.window.activeTextEditor;
-        if (editor) {
+        if (editor && autoSelected) {  // Check the autoSelected flag
             const currentSelection = editor.selection;
             if (!currentSelection.isEmpty) {
                 const currentPosition = currentSelection.end;
                 editor.selection = new vscode.Selection(currentPosition, currentPosition);
+                autoSelected = false;  // Reset the flag
             }
         }
         vscode.commands.executeCommand('default:type', args);
@@ -62,15 +66,15 @@ export function activate(context: vscode.ExtensionContext) {
 
                         // Adjust the selection to cover the pasted content
                         editor.selection = new vscode.Selection(targetSelection.start, endPosition);
+                        // Set the autoSelected flag since we've auto-selected the pasted text
+                        autoSelected = true;
                         // Reveal the pasted content in the editor
                         editor.revealRange(new vscode.Range(targetSelection.start, endPosition), vscode.TextEditorRevealType.Default);
                     } else {
-                        outputChannel.appendLine("Failed to paste content.");
+                        outputChannel.appendLine('Clipboard is empty.');
                     }
                 });
             }
-        } else {
-            outputChannel.appendLine('Clipboard is empty.');
         }
     });
 
