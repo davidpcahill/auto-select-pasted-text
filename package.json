@@ -1,9 +1,9 @@
 {
   "name": "auto-select-pasted-text",
   "displayName": "Auto Select Pasted Text",
-  "description": "Automatically selects text after it's pasted",
+  "description": "Automatically selects text after it's pasted for quick intents and edits.",
   "icon": "autoselectpastedtextlogo.png",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "publisher": "davidcahill",
   "license": "MIT",
   "repository": {
@@ -26,8 +26,49 @@
       {
         "command": "editor.action.clipboardPasteAction",
         "title": "Paste and Select"
+      },
+      {
+        "command": "autoSelectPastedText.toggleAutoSelection",
+        "title": "AutoSelectPastedText: Toggle Auto Selection of Pasted Text"
+      },
+      {
+        "command": "autoSelectPastedText.toggleLogging",
+        "title": "AutoSelectPastedText: Toggle Logging for Debugging"
+      },
+      {
+        "command": "autoSelectPastedText.toggleTypeDetection",
+        "title": "AutoSelectPastedText: Toggle Auto Deselection on Typing"
+      },
+      {
+        "command": "autoSelectPastedText.toggleManualSelection",
+        "title": "AutoSelectPastedText: Toggle Auto Selection for Manually Selected Text (Not Recommended)"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Auto Select Pasted Text",
+      "properties": {
+        "autoSelectPastedText.enableAutoSelection": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable automatic selection of pasted text."
+        },
+        "autoSelectPastedText.enableLogging": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable logging for debugging purposes."
+        },
+        "autoSelectPastedText.enableTypeDetection": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically deselect text when you start typing after pasting."
+        },
+        "autoSelectPastedText.enableManualSelection": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable the auto-selection behavior for manually selected text (not recommended)."
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "tsc -p ./",

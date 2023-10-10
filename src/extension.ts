@@ -8,20 +8,55 @@ let autoSelected: boolean = false;
 
 export function activate(context: vscode.ExtensionContext) {
     // Create an output channel for logging extension-related activities
-    const outputChannel = vscode.window.createOutputChannel("AutoSelectPaste");
+    const outputChannel = vscode.window.createOutputChannel("AutoSelectPastedText");
+
+    // Function to handle conditional logging based on the enableLogging setting
+    const log = (message: string) => {
+        const enableLogging = vscode.workspace.getConfiguration('autoSelectPastedText').get('enableLogging');
+        if (enableLogging) {
+            outputChannel.appendLine(message);
+        }
+    };
+
+    context.subscriptions.push(vscode.commands.registerCommand('autoSelectPastedText.toggleAutoSelection', () => {
+        const currentSetting = vscode.workspace.getConfiguration('autoSelectPastedText').get('enableAutoSelection');
+        vscode.workspace.getConfiguration('autoSelectPastedText').update('enableAutoSelection', !currentSetting, true);
+    }));
+
+    context.subscriptions.push(vscode.commands.registerCommand('autoSelectPastedText.toggleLogging', () => {
+        const currentSetting = vscode.workspace.getConfiguration('autoSelectPastedText').get('enableLogging');
+        vscode.workspace.getConfiguration('autoSelectPastedText').update('enableLogging', !currentSetting, true);
+    }));
+
+    context.subscriptions.push(vscode.commands.registerCommand('autoSelectPastedText.toggleTypeDetection', () => {
+        const currentSetting = vscode.workspace.getConfiguration('autoSelectPastedText').get('enableTypeDetection');
+        vscode.workspace.getConfiguration('autoSelectPastedText').update('enableTypeDetection', !currentSetting, true);
+    }));
+
+    context.subscriptions.push(vscode.commands.registerCommand('autoSelectPastedText.toggleManualSelection', () => {
+        const currentSetting = vscode.workspace.getConfiguration('autoSelectPastedText').get('enableManualSelection');
+        vscode.workspace.getConfiguration('autoSelectPastedText').update('enableManualSelection', !currentSetting, true);
+    }));
 
     // Indicate activation in the output channel
-    outputChannel.appendLine('Activating AutoSelectPaste extension...');
+    log('Activating autoSelectPastedText extension...');
 
     // Register the type command to handle the deselection behavior
     vscode.commands.registerCommand('type', (args) => {
         const editor = vscode.window.activeTextEditor;
-        if (editor && autoSelected) {  // Check the autoSelected flag
+        const enableTypeDetection = vscode.workspace.getConfiguration('autoSelectPastedText').get('enableTypeDetection');
+        const enableManualSelection = vscode.workspace.getConfiguration('autoSelectPastedText').get('enableManualSelection');
+
+        if (editor) {
             const currentSelection = editor.selection;
-            if (!currentSelection.isEmpty) {
+
+            if (autoSelected && enableTypeDetection && !currentSelection.isEmpty) {
                 const currentPosition = currentSelection.end;
                 editor.selection = new vscode.Selection(currentPosition, currentPosition);
-                autoSelected = false;  // Reset the flag
+                autoSelected = false; // Reset the flag
+            } else if (!autoSelected && enableManualSelection && !currentSelection.isEmpty) {
+                const currentPosition = currentSelection.end;
+                editor.selection = new vscode.Selection(currentPosition, currentPosition);
             }
         }
         vscode.commands.executeCommand('default:type', args);
@@ -29,7 +64,9 @@ export function activate(context: vscode.ExtensionContext) {
 
     // Register the paste command
     let pasteCommandDisposable = vscode.commands.registerCommand('editor.action.clipboardPasteAction', async () => {
-        outputChannel.appendLine('Paste command executed.');
+        const enableAutoSelection = vscode.workspace.getConfiguration('autoSelectPastedText').get('enableAutoSelection');
+
+        log('Paste command executed.');
 
         // Read content from clipboard
         const clipboardContent = await vscode.env.clipboard.readText();
@@ -64,10 +101,12 @@ export function activate(context: vscode.ExtensionContext) {
                         const endCharacter = (linesPasted.length === 1) ? (targetSelection.start.character + lastLineLength) : lastLineLength;
                         const endPosition = new vscode.Position(endLine, endCharacter);
 
-                        // Adjust the selection to cover the pasted content
-                        editor.selection = new vscode.Selection(targetSelection.start, endPosition);
-                        // Set the autoSelected flag since we've auto-selected the pasted text
-                        autoSelected = true;
+                        if (enableAutoSelection) {
+                            // Adjust the selection to cover the pasted content
+                            editor.selection = new vscode.Selection(targetSelection.start, endPosition);
+                            // Set the autoSelected flag since we've auto-selected the pasted text
+                            autoSelected = true;
+                        }
                         // Reveal the pasted content in the editor
                         editor.revealRange(new vscode.Range(targetSelection.start, endPosition), vscode.TextEditorRevealType.Default);
                     } else {
@@ -87,7 +126,7 @@ export function activate(context: vscode.ExtensionContext) {
             const selections = event.selections;
             if (selections && selections.length > 0) {
                 const selection = selections[0];
-                outputChannel.appendLine(`Selection changed: Start(${selection.start.line}, ${selection.start.character}), End(${selection.end.line}, ${selection.end.character})`);
+                log(`Selection changed: Start(${selection.start.line}, ${selection.start.character}), End(${selection.end.line}, ${selection.end.character})`);
             }
         }
     });

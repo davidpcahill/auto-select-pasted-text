@@ -8,7 +8,9 @@ Boost your VSCode experience with **Auto Select Pasted Text**. This extension is
 
 - 💼 **Smart Pasting & Deselection**: If you paste and then type, the extension smartly deselects the pasted content and positions the cursor at the end. This ensures a seamless transition between pasting and continuing to type. Moreover, the extension recognizes repeated pasting actions and appends content without overwriting the previous pastes.
 
-- 📖 **Logging & Debugging**: Behind the scenes, the extension logs significant events, such as activations, paste commands, and selection changes. This is invaluable for developers seeking insights or debugging the extension's behavior.
+- 📖 **Logging & Debugging**: Behind the scenes, the extension logs significant events, such as activations, paste commands, and selection changes. This is invaluable for developers seeking insights or debugging the extension's behavior. Easily toggle logging on or off via the command palette or settings.
+
+- 🎚 **Settings & Command Menu**: Customize your experience by using the settings or command menu to toggle various features, including auto selection of pasted text, logging for debugging, auto deselection on typing, and more.
 
 - 📦 **Seamless Integration**: Experience the magic without any configuration. Just install, and you're good to go!
 
@@ -32,6 +34,8 @@ Whenever you paste content, it will be automatically highlighted. This auto-sele
 - **Deletion**: Changed your mind about the pasted content? Simply press `Delete` or `Backspace` to remove the selected content.
 
 After pasting, if you start typing, the auto-selected content will be deselected, and the cursor will position itself at the end, allowing for a seamless transition between pasting and typing.
+
+For a personalized experience, delve into the extension's settings. Here, you can fine-tune features such as auto-deselection upon typing or enable debugging logs. But that's not all! If you need swift alterations, the command palette is at your service. Simply press `Ctrl+Shift+P` to open the command palette and search for commands starting with `AutoSelectPastedText:`. This will present a list of quick toggles and actions specific to the extension, allowing you to modify its behavior without diving into the settings menu.
 
 This auto-selection feature aims to reduce the friction between pasting and editing, ensuring a smooth and efficient coding experience.
 

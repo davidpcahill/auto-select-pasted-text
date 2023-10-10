@@ -2,6 +2,20 @@
 
 All notable changes to the "Auto Select Pasted Text" extension will be documented in this file.
 
+## [0.3.0] - 2023-10-11
+### Added
+- Implemented `enableLogging` setting to conditionally log extension activities.
+- Introduced a toggle command for the `enableLogging` setting.
+- Created a utility function to handle conditional logging based on the `enableLogging` setting.
+  
+### Changed
+- Refactored the paste command to utilize the `enableAutoSelection` setting.
+- Adjusted the type command to handle both auto and manual selection behaviors.
+  
+### Fixed
+- Addressed inconsistencies in the configuration and command naming.
+- Resolved an issue with the logging setting not updating immediately.
+
 ## [0.2.1] - 2023-10-10
 - Updated README.md
 
