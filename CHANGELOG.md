@@ -2,6 +2,9 @@
 
 All notable changes to the "Auto Select Pasted Text" extension will be documented in this file.
 
+## [0.2.1] - 2023-10-10
+- Updated README.md
+
 ## [0.2.0] - 2023-10-09
 - Added tracking to distinguish between auto-selection vs manual selection.
 - Added logic to not perform auto actions on manually selected text.
