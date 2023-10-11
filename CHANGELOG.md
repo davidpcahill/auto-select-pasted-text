@@ -2,6 +2,9 @@
 
 All notable changes to the "Auto Select Pasted Text" extension will be documented in this file.
 
+## [0.3.2] - 2023-10-11
+- Added demo gif to README.md
+
 ## [0.3.1] - 2023-10-11
 - Updated marketplace keywords
 

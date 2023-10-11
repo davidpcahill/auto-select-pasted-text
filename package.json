@@ -3,7 +3,7 @@
   "displayName": "Auto Select Pasted Text",
   "description": "Automatically selects text after it's pasted for quick intents and edits.",
   "icon": "autoselectpastedtextlogo.png",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "publisher": "davidcahill",
   "license": "MIT",
   "repository": {
