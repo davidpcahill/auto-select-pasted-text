@@ -2,6 +2,8 @@
 
 Boost your VSCode experience with **Auto Select Pasted Text**. This extension is perfect for developers frequently copying and pasting code snippets, especially from online sources or ChatGPT. Eliminate the manual re-selection hassle post-pasting. The extension ensures that every time you paste content, it's instantly selected, making the editing process more streamlined and efficient.
 
+![Demo of Auto Select Pasted Text](https://github.com/TagWolf/auto-select-pasted-text/blob/main/demo.gif?raw=true)
+
 ## 🌟 Features
 
 - 📌 **Instant Highlight**: After pasting, your text is automatically highlighted. This allows for immediate operations, such as indenting, commenting, or other formatting tasks.
