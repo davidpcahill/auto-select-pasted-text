@@ -2,6 +2,10 @@
 
 All notable changes to the "Auto Select Pasted Text" extension will be documented in this file.
 
+## [0.3.3] - 2023-10-17
+### Fixed
+- Resolved bug where certain edge cases could not differentiate auto vs manual selection operations.
+
 ## [0.3.2] - 2023-10-11
 - Added demo gif to README.md
 

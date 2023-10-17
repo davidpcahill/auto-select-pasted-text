@@ -1,10 +1,9 @@
 import * as vscode from 'vscode';
 
-// Variable to store the last pasted content
-let lastPastedContent: string | null = null;
-
 // Flag to track if the selection was auto-selected after pasting
 let autoSelected: boolean = false;
+let manualMouseSelected: boolean = false;
+let manualKeyboardSelected: boolean = false;
 
 export function activate(context: vscode.ExtensionContext) {
     // Create an output channel for logging extension-related activities
@@ -45,16 +44,11 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('type', (args) => {
         const editor = vscode.window.activeTextEditor;
         const enableTypeDetection = vscode.workspace.getConfiguration('autoSelectPastedText').get('enableTypeDetection');
-        const enableManualSelection = vscode.workspace.getConfiguration('autoSelectPastedText').get('enableManualSelection');
 
         if (editor) {
             const currentSelection = editor.selection;
 
-            if (autoSelected && enableTypeDetection && !currentSelection.isEmpty) {
-                const currentPosition = currentSelection.end;
-                editor.selection = new vscode.Selection(currentPosition, currentPosition);
-                autoSelected = false; // Reset the flag
-            } else if (!autoSelected && enableManualSelection && !currentSelection.isEmpty) {
+            if (enableTypeDetection && autoSelected && !currentSelection.isEmpty) {
                 const currentPosition = currentSelection.end;
                 editor.selection = new vscode.Selection(currentPosition, currentPosition);
             }
@@ -62,9 +56,15 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.executeCommand('default:type', args);
     });
 
+
     // Register the paste command
     let pasteCommandDisposable = vscode.commands.registerCommand('editor.action.clipboardPasteAction', async () => {
         const enableAutoSelection = vscode.workspace.getConfiguration('autoSelectPastedText').get('enableAutoSelection');
+        const enableManualSelection = vscode.workspace.getConfiguration('autoSelectPastedText').get('enableManualSelection');
+
+        if (manualMouseSelected || manualKeyboardSelected) {
+            autoSelected = false;
+        }
 
         log('Paste command executed.');
 
@@ -77,12 +77,11 @@ export function activate(context: vscode.ExtensionContext) {
                 let targetSelection: vscode.Selection;
 
                 // Determine the target for the paste: either append after the current selection or replace it
-                if (clipboardContent === lastPastedContent) {
+                if (autoSelected || enableManualSelection) {
                     const currentPosition = editor.selection.end;
                     targetSelection = new vscode.Selection(currentPosition, currentPosition);
                 } else {
                     targetSelection = editor.selection;
-                    lastPastedContent = clipboardContent;  // Cache the clipboard content
                 }
 
                 // Split content by lines to calculate the selection end position later
@@ -104,7 +103,6 @@ export function activate(context: vscode.ExtensionContext) {
                         if (enableAutoSelection) {
                             // Adjust the selection to cover the pasted content
                             editor.selection = new vscode.Selection(targetSelection.start, endPosition);
-                            // Set the autoSelected flag since we've auto-selected the pasted text
                             autoSelected = true;
                         }
                         // Reveal the pasted content in the editor
@@ -115,6 +113,9 @@ export function activate(context: vscode.ExtensionContext) {
                 });
             }
         }
+        // At the end of this command, reset the manual selection flags:
+        manualMouseSelected = false;
+        manualKeyboardSelected = false;
     });
 
     // Add the paste command disposable to the extension context's subscriptions
@@ -122,7 +123,14 @@ export function activate(context: vscode.ExtensionContext) {
 
     // Debug: Log selection changes in the editor for tracking
     vscode.window.onDidChangeTextEditorSelection((event) => {
+        if (event.kind === vscode.TextEditorSelectionChangeKind.Mouse) {
+            manualMouseSelected = true;
+        } else if (event.kind === vscode.TextEditorSelectionChangeKind.Keyboard) {
+            manualKeyboardSelected = true;
+        }
+
         if (event.textEditor.document.uri.scheme === 'file') {
+            autoSelected = event.kind === 3;
             const selections = event.selections;
             if (selections && selections.length > 0) {
                 const selection = selections[0];
